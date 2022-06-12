@@ -1,7 +1,9 @@
 """Project pipelines."""
 from typing import Dict
 
-from kedro.pipeline import Pipeline, pipeline
+from kedro.pipeline import Pipeline
+
+from networkft.pipelines.int_covalent import create_int_covalent_pipeline
 
 
 def register_pipelines() -> Dict[str, Pipeline]:
@@ -10,4 +12,5 @@ def register_pipelines() -> Dict[str, Pipeline]:
     Returns:
         A mapping from a pipeline name to a ``Pipeline`` object.
     """
-    return {"__default__": pipeline([])}
+    covalent_pipeline = create_int_covalent_pipeline()
+    return {"__default__": covalent_pipeline, "covalent": covalent_pipeline}
