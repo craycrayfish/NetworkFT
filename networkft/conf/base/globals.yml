@@ -1,0 +1,6 @@
+data_root: "\networkft\data"
+data_path:
+  root: ${data_root}
+  raw: ${data_root}\01_raw
+  intermediate: ${data_root}\02_intermediate
+  primary: ${data_root}\03_primary
