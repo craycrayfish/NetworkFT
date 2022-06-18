@@ -16,7 +16,7 @@ def create_int_covalent_pipeline(**kwargs):
                     "params:covalent.tx_metadata",
                     "params:covalent.tx_params",
                 ],
-                output="int_covalent_nft_txs",
+                outputs="int_covalent_nft_txs",
                 name="int_parse_covalent_txs_node",
             )
         ]

@@ -2,6 +2,7 @@
 
 from typing import Dict, List, Set
 import pandas as pd
+import logging
 
 
 def parse_covalent_txs(
@@ -71,6 +72,7 @@ def parse_covalent_txs(
                 parsed_data.append(
                     {"collection": collection_name, "token_id": token_id, **tx_data}
                 )
+    logging.info(f"Length of df: {len(parsed_data)}")
     return pd.DataFrame.from_records(parsed_data)
 
 
@@ -91,7 +93,11 @@ def parse_tx_data(txs: List, tx_metadata: Set, tx_params: Set) -> List:
     for tx in txs:
         try:
             params = tx["decoded"]["params"]
-        except KeyError:
+        except (KeyError, TypeError):
+            # skip if transaction is empty
+            continue
+
+        if not params:
             # skip if transaction is empty
             continue
 

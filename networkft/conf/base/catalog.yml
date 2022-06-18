@@ -5,14 +5,13 @@
 
 raw_covalent_nft_txs:
   type: networkft.io.covalent_txs_dataset.CovalentDataSet
-  filepath: ${data_path.raw}
+  filepath: data\01_raw
   load_args:
     suffix: txs
 
 int_covalent_nft_txs:
   type: pandas.ParquetDataSet
-  filepath: ${data_path.intermediate}
+  filepath: data\02_intermediate\covalent_nft_txs.parquet
   save_args:
     compression: GZIP
-    from_pandas:
-      preserve_index: false
+    index: false
