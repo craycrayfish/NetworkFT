@@ -4,7 +4,12 @@ import pandas as pd
 from web3 import Web3
 
 
-def convert_timestamp(df: pd.DataFrame, col: Union[str, List], dt_format: str = None, errors: str = "raise"):
+def convert_timestamp(
+    df: pd.DataFrame,
+    col: Union[str, List],
+    dt_format: str = None,
+    errors: str = "raise",
+):
     """Converts a specific column or list of columns in a dataframe to datetime format
 
     Args:
@@ -25,9 +30,12 @@ def convert_timestamp(df: pd.DataFrame, col: Union[str, List], dt_format: str = 
         infer = False
 
     for column in col:
-        df[column] = pd.to_datetime(df[column], errors=errors, format=dt_format, infer_datetime_format=infer)
+        df[column] = pd.to_datetime(
+            df[column], errors=errors, format=dt_format, infer_datetime_format=infer
+        )
 
     return df
+
 
 def convert_wei(input_df: pd.DataFrame, col: Union[str, List]):
     """Converts a specific column of list of columns from wei units to ether
