@@ -3,7 +3,7 @@ from typing import Dict
 
 from kedro.pipeline import Pipeline
 
-from networkft.pipelines.int_covalent import create_int_covalent_pipeline
+from networkft.pipelines.int import create_int_covalent_pipeline
 
 
 def register_pipelines() -> Dict[str, Pipeline]:

@@ -2,7 +2,7 @@
 import pandas as pd
 import pytest
 
-from networkft.covalent.transactions import parse_covalent_txs, parse_tx_data
+from networkft.nodes.covalent_txs import parse_covalent_txs, parse_tx_data
 
 
 @pytest.fixture

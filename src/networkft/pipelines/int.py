@@ -3,7 +3,7 @@
 
 from kedro.pipeline import Pipeline, node
 
-from networkft.covalent.transactions import parse_covalent_txs
+from networkft.nodes.covalent_txs import parse_covalent_txs
 
 
 def create_int_covalent_pipeline(**kwargs):
