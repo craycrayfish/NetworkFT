@@ -11,13 +11,15 @@ def convert_timestamp(
     dt_format: str = None,
     errors: str = "raise",
 ):
-    """Converts a specific column or list of columns in a dataframe to datetime format
+    """Converts a specific column or list of columns in a dataframe to datetime
+    format
 
     Args:
         df: dataframe with columns to be converted
         col: column or list of columns with timestamp to be converted
         dt_format: string showing strftime format to convert columns on
-        errors: behaviour if error encountered; can be "raise", "ignore" or "coerce"
+        errors: behaviour if error encountered; can be "raise", "ignore" or
+        "coerce"
 
     Returns:
         dataframe with column(s) converted
@@ -55,7 +57,8 @@ def convert_wei(input_df: pd.DataFrame, col: Union[str, List]):
 
     df[col] = df[col].apply(
         lambda x: [
-            float(Web3.fromWei(val, "ether")) if pd.notnull(val) else 0.0 for val in x
+            float(Web3.fromWei(int(val), "ether")) if pd.notnull(val) else 0.0
+            for val in x
         ]
     )
     return df

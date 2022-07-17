@@ -19,3 +19,9 @@ covalent:
   # For parsing
   tx_metadata: ["block_signed_at"]
   tx_params: ["from", "to", "value"]
+
+  # Conversion of column type
+  convert_wei:
+    - value
+  convert_timestamp:
+    - block_signed_at

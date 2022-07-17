@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 from web3 import Web3
 
-from networkft.nodes.schema_enforcement import convert_timestamp, convert_wei
+from networkft.nodes.column_typing import convert_timestamp, convert_wei
 
 
 @pytest.fixture
