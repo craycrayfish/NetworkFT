@@ -1,8 +1,9 @@
 """Parse transaction data downloaded from covalent"""
 
-from typing import Dict, List, Set
-import pandas as pd
 import logging
+from typing import Dict, List, Set
+
+import pandas as pd
 
 
 def parse_covalent_txs(
@@ -47,11 +48,12 @@ def parse_covalent_txs(
     Args:
         txs: json response from covalent api as saved by covalent io
         tx_metadata: list of keys to extract from each txs dictionary
-        tx_params: list of parameters to to extract from each transaction param dictionary
+        tx_params: list of parameters to to extract from each transaction param
+        dictionary
 
     Returns:
-        dataframe of transactions containing collection, token_id, timestamp, type of transaction,
-        from and to addresses
+        dataframe of transactions containing collection, token_id, timestamp,
+        type of transaction, from and to addresses
     """
 
     parsed_data = []
@@ -77,17 +79,20 @@ def parse_covalent_txs(
 
 
 def parse_tx_data(txs: List, tx_metadata: Set, tx_params: Set) -> List:
-    """Parses the list of transactions to a dictionary containing the key info for each transaction
+    """Parses the list of transactions to a dictionary containing the key info
+    for each transaction
     Improvements: enforce type checks for params
 
     Args:
-        txs: list of transactions as follows from the "tx" key of the input found in
-        parse_covalent_txs
+        txs: list of transactions as follows from the "tx" key of the input
+        found in parse_covalent_txs
         tx_metadata: list of keys to extract from each txs dictionary
-        tx_params: set of parameters to to extract from the transaction param entries
+        tx_params: set of parameters to extract from the transaction param
+        entries
 
     Returns:
-        list of dicts, each containing block_signed_at, tx_type, from, to, value, name
+        list of dicts, each containing block_signed_at, tx_type, from, to,
+        value, name
     """
     parsed_txs = []
     for tx in txs:

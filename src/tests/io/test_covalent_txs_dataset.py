@@ -1,10 +1,8 @@
 """Unit test for CovalentDataSet"""
 
-import json
 from pathlib import Path
 
 from networkft.io.covalent_txs_dataset import CovalentDataSet
-
 
 TEST_TXS_DIRECTORY = str(
     Path(__file__).resolve().parents[1] / "test_data" / "covalent_txs"

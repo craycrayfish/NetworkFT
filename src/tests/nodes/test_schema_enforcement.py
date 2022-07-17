@@ -1,8 +1,9 @@
 """Tests for schema enforcement nodes"""
-import pytest
-import pandas as pd
-from web3 import Web3
 from datetime import datetime, timezone
+
+import pandas as pd
+import pytest
+from web3 import Web3
 
 from networkft.nodes.schema_enforcement import convert_timestamp, convert_wei
 

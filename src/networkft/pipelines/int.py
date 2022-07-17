@@ -1,4 +1,5 @@
-"""Pipeline to parse transaction data downloaded from covalent api. Transfrorms raw data to intermediate layer
+"""Pipeline to parse transaction data downloaded from covalent api.
+Transforms raw data to intermediate layer
 """
 
 from kedro.pipeline import Pipeline, node
