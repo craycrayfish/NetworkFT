@@ -3,13 +3,13 @@
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://kedro.readthedocs.io/en/stable/data/data_catalog.html
 
-raw_covalent_nft_txs:
+raw_covalent_txs:
   type: networkft.io.covalent_txs_dataset.CovalentDataSet
   filepath: data\01_raw
   load_args:
     suffix: txs
 
-int_covalent_nft_txs:
+int_covalent_txs:
   type: pandas.ParquetDataSet
   filepath: data\02_intermediate\covalent_nft_txs.parquet
   save_args:
