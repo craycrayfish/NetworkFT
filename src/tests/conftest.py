@@ -1,15 +1,15 @@
+from datetime import datetime
 import pytest
 import pandas as pd
 import json
 import tempfile
 import os
 from pathlib import Path
-from web3 import Web3
 from kedro.io import DataCatalog
-from kedro.config import ConfigLoader
-from kedro.framework.project import settings
+
 
 TEST_DATA_DIR = Path().cwd() / "src/tests/test_data"
+DT_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
 
 @pytest.fixture(scope="module")
@@ -38,14 +38,26 @@ def catalog_config(temp_dir):
 
 
 @pytest.fixture(scope="module")
-def conf_loader():
-    conf_path = str(Path.cwd() / settings.CONF_SOURCE)
-    conf_loader = ConfigLoader(conf_source=conf_path, env="local")
-    return conf_loader
+def params():
+    params = {
+        "covalent": {
+            "type": "kedro.io.AbstractDataSet",
+            "tx_metadata": ["block_signed_at"],
+            "tx_params": ["from", "to", "value"],
+            "convert_wei": ["value"],
+            "convert_timestamp": ["block_signed_at"]
+        }
+    }
+    return params
 
 
 @pytest.fixture(scope="module")
-def test_catalog(catalog_config):
+def test_catalog(catalog_config, params):
+    catalog_config.update(
+        {
+            f"params:{key}": value for key, value in params.items()
+        }
+    )
     io = DataCatalog.from_config(catalog_config)
     return io
 
@@ -68,7 +80,10 @@ def df_tx():
         {
             "collection": ["test", "test"],
             "token_id": ["0", "1"],
-            "block_signed_at": ["2022-01-01T01:23:45Z", "2022-12-31T01:23:45Z"],
+            "block_signed_at": [
+                datetime.strptime("2022-01-01T01:23:45Z", DT_FORMAT),
+                datetime.strptime("2022-12-31T01:23:45Z", DT_FORMAT)
+            ],
             "from": [
                 "0xed5af388653567af2f388e6224dc7c4b3241c544",
                 "0x0000000000000000000000000000000000000000",
@@ -77,8 +92,7 @@ def df_tx():
                 "0xd45058bf25bbd8f586124c479d384c8c708ce23a",
                 "0xd45058bf25bbd8f586124c479d384c8c708ce23a",
             ],
-            "value": [None, Web3.toWei(1, "ether")],
+            "value": [0, 1],
             "name": ["Transfer", "Test"],
         }
     )
-

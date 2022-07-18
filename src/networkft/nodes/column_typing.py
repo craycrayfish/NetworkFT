@@ -34,7 +34,10 @@ def convert_timestamp(
 
     for column in col:
         df[column] = pd.to_datetime(
-            df[column], errors=errors, format=dt_format, infer_datetime_format=infer
+            df[column],
+            errors=errors,
+            format=dt_format,
+            infer_datetime_format=infer
         )
 
     return df

@@ -23,13 +23,19 @@ def create_int_covalent_pipeline(**kwargs):
             ),
             node(
                 func=convert_timestamp,
-                inputs=["raw_covalent_txs_parsed", "params:covalent.convert_timestamp"],
+                inputs=[
+                    "raw_covalent_txs_parsed",
+                    "params:covalent.convert_timestamp"
+                ],
                 outputs="raw_covalent_txs_parsed_ts",
                 name="int_convert_ts_covalent_txs_node",
             ),
             node(
                 func=convert_wei,
-                inputs=["raw_covalent_txs_parsed_ts", "params:covalent.convert_wei"],
+                inputs=[
+                    "raw_covalent_txs_parsed_ts",
+                    "params:covalent.convert_wei"
+                ],
                 outputs="int_covalent_txs",
                 name="int_convert_wei_covalent_txs_node",
             ),
