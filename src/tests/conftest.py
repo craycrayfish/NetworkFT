@@ -7,6 +7,8 @@ import os
 from pathlib import Path
 from kedro.io import DataCatalog
 
+from networkft.utils.reshape import flatten_dict
+from tests.raw_covalent_txs import RAW_TXS
 
 TEST_DATA_DIR = Path().cwd() / "src/tests/test_data"
 DT_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
@@ -18,11 +20,19 @@ def temp_dir():
 
 
 @pytest.fixture(scope="module")
-def catalog_config(temp_dir):
+def raw_dataset(temp_dir):
+    json_path = os.path.join(temp_dir, "test_txs.json")
+    with open(json_path, "w") as f:
+        json.dump(RAW_TXS, f)
+    return json_path
+
+
+@pytest.fixture(scope="module")
+def catalog_config(temp_dir, raw_dataset):
     config = {
         "raw_covalent_txs": {
             "type": "networkft.io.covalent_txs_dataset.CovalentDataSet",
-            "filepath": str(TEST_DATA_DIR / "covalent_txs/test_txs.json"),
+            "filepath": raw_dataset,
             "load_args": {"suffix": "txs"}
         },
         "int_covalent_txs": {
@@ -48,17 +58,17 @@ def params():
             "convert_timestamp": ["block_signed_at"]
         }
     }
-    return params
+    return flatten_dict(params)
 
 
 @pytest.fixture(scope="module")
 def test_catalog(catalog_config, params):
-    catalog_config.update(
+    io = DataCatalog.from_config(catalog_config)
+    io.add_feed_dict(
         {
             f"params:{key}": value for key, value in params.items()
         }
     )
-    io = DataCatalog.from_config(catalog_config)
     return io
 
 

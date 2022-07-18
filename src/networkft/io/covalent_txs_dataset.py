@@ -88,13 +88,13 @@ class CovalentDataSet(AbstractVersionedDataSet):
 
     def _load(self) -> Dict:
         load_path = get_filepath_str(self._get_load_path(), self._protocol)
-
         txs_file_suffix = self._load_args.get("suffix", "")
         txs_files = [f for f in Path(load_path).iterdir() if txs_file_suffix in f.name]
 
         txs = {}
         for txs_file in txs_files:
             with self._fs.open(str(txs_file)) as f:
+                import pdb; pdb.set_trace()
                 txs[txs_file.stem.split("_")[0]] = json.load(f)
         return txs
 
