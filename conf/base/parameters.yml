@@ -21,7 +21,5 @@ covalent:
   tx_params: ["from", "to", "value"]
 
   # Conversion of column type
-  convert_wei:
-    - value
-  convert_timestamp:
-    - block_signed_at
+  convert_wei: [value]
+  convert_timestamp: [block_signed_at]
