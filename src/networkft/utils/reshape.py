@@ -3,8 +3,8 @@ from collections.abc import MutableMapping
 from typing import Dict
 
 
-def flatten_dict(d: Dict, parent_key: str = '', sep: str = "."):
-    """ Flattens a dictionary nested multiple times
+def flatten_dict(d: Dict, parent_key: str = "", sep: str = "."):
+    """Flattens a dictionary nested multiple times
 
     Args:
         d: dictionary object to flatten

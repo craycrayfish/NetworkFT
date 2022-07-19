@@ -94,7 +94,6 @@ class CovalentDataSet(AbstractVersionedDataSet):
         txs = {}
         for txs_file in txs_files:
             with self._fs.open(str(txs_file)) as f:
-                import pdb; pdb.set_trace()
                 txs[txs_file.stem.split("_")[0]] = json.load(f)
         return txs
 
