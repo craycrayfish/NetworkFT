@@ -23,3 +23,15 @@ covalent:
   # Conversion of column type
   convert_wei: [value]
   convert_timestamp: [block_signed_at]
+
+  # Filter to primary layer
+  filter_columns:
+    from:
+      condition: "!="
+      value: 0x0000000000000000000000000000000000000000
+    to:
+      condition: "!="
+      value: 0x0000000000000000000000000000000000000000
+    value:
+      condition: ">"
+      value: 0
