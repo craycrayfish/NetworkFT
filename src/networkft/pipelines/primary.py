@@ -16,7 +16,7 @@ def create_pri_pipeline(**kwargs):
                     "params:covalent.filter_columns",
                 ],
                 outputs="pri_covalent_txs",
-                name="pri_filter_node"
+                name="pri_filter_node",
             )
         ]
     )
