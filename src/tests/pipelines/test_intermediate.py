@@ -4,11 +4,11 @@ import shutil
 import pandas as pd
 from kedro.runner import SequentialRunner
 
-from networkft.pipelines.int import create_int_covalent_pipeline
+from networkft.pipelines.intermediate import create_int_pipeline
 
 
 def test_parse_convert_timestamp_integration(temp_dir, test_catalog, params, df_tx):
-    pipe = create_int_covalent_pipeline()
+    pipe = create_int_pipeline()
     runner = SequentialRunner()
     runner.run(pipe, test_catalog)
     df = test_catalog.load("int_covalent_txs")

@@ -8,7 +8,7 @@ from networkft.nodes.column_typing import convert_timestamp, convert_wei
 from networkft.nodes.covalent_txs import parse_covalent_txs
 
 
-def create_int_covalent_pipeline(**kwargs):
+def create_int_pipeline(**kwargs):
     return Pipeline(
         [
             node(
