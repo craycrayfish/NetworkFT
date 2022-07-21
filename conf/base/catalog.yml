@@ -15,3 +15,10 @@ int_covalent_txs:
   save_args:
     compression: GZIP
     index: false
+
+pri_covalent_txs:
+  type: pandas.ParquetDataSet
+  filepath: data\02_primary\covalent_nft_txs.parquet
+  save_args:
+    compression: GZIP
+    index: false
