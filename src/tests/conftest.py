@@ -11,7 +11,6 @@ from kedro.io import DataCatalog
 from networkft.utils.reshape import flatten_dict
 from tests.raw_covalent_txs import RAW_TXS
 
-TEST_DATA_DIR = Path().cwd() / "src/tests/test_data"
 DT_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
 

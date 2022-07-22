@@ -4,9 +4,9 @@ import pandas as pd
 
 
 def node_convert_to_unidirectional(
-        _df: pd.DataFrame,
-        cols: Dict = {"from": "in", "to": "out"},
-        entity_col: str = "entity"
+    _df: pd.DataFrame,
+    cols: Dict = {"from": "in", "to": "out"},
+    entity_col: str = "entity",
 ):
     """Node to convert table of transactions from bidirectional to unidirectional
     format.
@@ -29,11 +29,9 @@ def node_convert_to_unidirectional(
     for col, direction in cols.items():
         df = _df.copy()
         df["direction"] = direction
-        df = df.rename(
-            columns={col: entity_col}
-        ).drop(
+        df = df.rename(columns={col: entity_col}).drop(
             [c for c in cols if c != col], axis=1
         )
         dfs.append(df)
 
-    return pd.concat(dfs)
+    return pd.concat(dfs).reset_index(drop=True)
