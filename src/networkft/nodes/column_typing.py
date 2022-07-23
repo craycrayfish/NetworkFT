@@ -1,5 +1,5 @@
 """Nodes to enforce column schema"""
-from typing import List, Union
+from typing import List, Union, Dict
 
 import pandas as pd
 from web3 import Web3
@@ -62,3 +62,8 @@ def convert_wei(input_df: pd.DataFrame, col: Union[str, List]):
         ]
     )
     return df
+
+
+def rename_columns(df: pd.DataFrame, rename: Dict):
+    """Renames columns in a dataframe using pd.rename method"""
+    return df.rename(rename, axis=1)

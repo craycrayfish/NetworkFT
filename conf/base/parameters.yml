@@ -23,6 +23,8 @@ covalent:
   # Conversion of column type
   convert_wei: [value]
   convert_timestamp: [block_signed_at]
+  rename_columns:
+    block_signed_at: timestamp
 
   # Filter to primary layer
   filter_columns:
@@ -44,8 +46,8 @@ covalent:
     entity_col: entity
 
   # Project-level aggregation
-  groupby: ["block_signed_at", "collection", "entity", "direction"]
+  groupby: ["timestamp", "collection", "entity", "direction"]
   agg:
     value: sum
   time_cols:
-    block_signed_at: 5Min
+    timestamp: 5Min

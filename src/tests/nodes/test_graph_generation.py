@@ -16,7 +16,7 @@ def test_convert_to_unidirectional(df_tx):
         {
             "collection": ["test"] * 4,
             "token_id": ["0", "1", "0", "1"],
-            "block_signed_at": [
+            "timestamp": [
                 datetime.strptime("2022-01-01T01:23:45Z", DT_FORMAT).replace(
                     tzinfo=timezone.utc
                 ),
@@ -47,13 +47,13 @@ def test_convert_to_unidirectional(df_tx):
 def test_agg_df(df_tx):
     df = agg_df(
         df_tx,
-        ["block_signed_at", "collection"],
+        ["timestamp", "collection"],
         {"value": "sum"},
-        {"block_signed_at": "1Y"}
+        {"timestamp": "1Y"}
     )
     expected_df = pd.DataFrame(
         {
-            "block_signed_at": [
+            "timestamp": [
                 datetime.strptime("2022-12-31T00:00:00Z", DT_FORMAT).replace(
                     tzinfo=timezone.utc
                 )
