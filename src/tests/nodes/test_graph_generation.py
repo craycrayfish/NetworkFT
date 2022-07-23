@@ -2,27 +2,31 @@
 import pandas as pd
 from datetime import datetime, timezone
 
-from networkft.nodes.graph_generation import node_convert_to_unidirectional
+from networkft.nodes.graph_generation import (
+    convert_to_unidirectional,
+    agg_df
+)
+
+DT_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
 
-def test_node_convert_to_unidirectional(df_tx):
-    df = node_convert_to_unidirectional(df_tx)
-    dt_format = "%Y-%m-%dT%H:%M:%SZ"
+def test_convert_to_unidirectional(df_tx):
+    df = convert_to_unidirectional(df_tx)
     expected_df = pd.DataFrame(
         {
             "collection": ["test"] * 4,
             "token_id": ["0", "1", "0", "1"],
             "block_signed_at": [
-                datetime.strptime("2022-01-01T01:23:45Z", dt_format).replace(
+                datetime.strptime("2022-01-01T01:23:45Z", DT_FORMAT).replace(
                     tzinfo=timezone.utc
                 ),
-                datetime.strptime("2022-12-31T01:23:45Z", dt_format).replace(
+                datetime.strptime("2022-12-31T01:23:45Z", DT_FORMAT).replace(
                     tzinfo=timezone.utc
                 ),
-                datetime.strptime("2022-01-01T01:23:45Z", dt_format).replace(
+                datetime.strptime("2022-01-01T01:23:45Z", DT_FORMAT).replace(
                     tzinfo=timezone.utc
                 ),
-                datetime.strptime("2022-12-31T01:23:45Z", dt_format).replace(
+                datetime.strptime("2022-12-31T01:23:45Z", DT_FORMAT).replace(
                     tzinfo=timezone.utc
                 ),
             ],
@@ -35,6 +39,27 @@ def test_node_convert_to_unidirectional(df_tx):
             "value": [0.0, 1.0, 0.0, 1.0],
             "name": ["Transfer", "Test", "Transfer", "Test"],
             "direction": ["in", "in", "out", "out"],
+        }
+    )
+    pd.testing.assert_frame_equal(df, expected_df)
+
+
+def test_agg_df(df_tx):
+    df = agg_df(
+        df_tx,
+        ["block_signed_at", "collection"],
+        {"value": "sum"},
+        {"block_signed_at": "1Y"}
+    )
+    expected_df = pd.DataFrame(
+        {
+            "block_signed_at": [
+                datetime.strptime("2022-12-31T00:00:00Z", DT_FORMAT).replace(
+                    tzinfo=timezone.utc
+                )
+            ],
+            "collection": ["test"],
+            "value": [1.0]
         }
     )
     pd.testing.assert_frame_equal(df, expected_df)
