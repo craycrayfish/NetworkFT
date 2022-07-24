@@ -50,4 +50,4 @@ covalent:
   agg:
     value: sum
   time_cols:
-    timestamp: 5Min
+    timestamp: 1W
