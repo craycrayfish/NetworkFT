@@ -3,14 +3,14 @@ from datetime import datetime, timezone
 
 import pandas as pd
 
-from networkft.nodes.column_typing import convert_timestamp, convert_wei
+from networkft.nodes.column_typing import convert_timestamp, convert_wei, rename_columns
 
 
 def test_convert_timestamp(df_tx):
-    df = convert_timestamp(df_tx, col="block_signed_at")
+    df = convert_timestamp(df_tx, col="timestamp")
     expected_df = df_tx.copy(deep=True)
 
-    expected_df["block_signed_at"] = [
+    expected_df["timestamp"] = [
         datetime(2022, 1, 1, 1, 23, 45, tzinfo=timezone.utc),
         datetime(2022, 12, 31, 1, 23, 45, tzinfo=timezone.utc),
     ]
@@ -24,4 +24,21 @@ def test_convert_wei(df_tx):
 
     expected_df = df_tx.copy()
     expected_df["value"] = [0.0, 1.0e-18]
+    pd.testing.assert_frame_equal(df, expected_df)
+
+
+def test_rename_columns():
+    df = pd.DataFrame(
+        {
+            "col_1": [1],
+            "col_2": [2]
+        }
+    )
+    df = rename_columns(df, {"col_1": "test_1"})
+    expected_df = pd.DataFrame(
+        {
+            "test_1": [1],
+            "col_2": [2]
+        }
+    )
     pd.testing.assert_frame_equal(df, expected_df)

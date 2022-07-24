@@ -11,7 +11,6 @@ from kedro.io import DataCatalog
 from networkft.utils.reshape import flatten_dict
 from tests.raw_covalent_txs import RAW_TXS
 
-TEST_DATA_DIR = Path().cwd() / "src/tests/test_data"
 DT_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
 
@@ -54,6 +53,7 @@ def params():
             "tx_params": ["from", "to", "value"],
             "convert_wei": ["value"],
             "convert_timestamp": ["block_signed_at"],
+            "rename_columns": {"block_signed_at": "timestamp"}
         }
     }
     return flatten_dict(params)
@@ -72,7 +72,7 @@ def df_tx():
         {
             "collection": ["test", "test"],
             "token_id": ["0", "1"],
-            "block_signed_at": [
+            "timestamp": [
                 datetime.strptime("2022-01-01T01:23:45Z", DT_FORMAT).replace(
                     tzinfo=timezone.utc
                 ),

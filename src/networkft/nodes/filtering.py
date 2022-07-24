@@ -7,7 +7,7 @@ import pandas as pd
 LOGGER = logging.Logger
 
 
-def node_filter_dataframe(_df: pd.DataFrame, filter_columns: Dict):
+def filter_dataframe(_df: pd.DataFrame, filter_columns: Dict):
     """Filters dataframe based on the conditions defined in yml.
     Expects conditions to be defined in the following format
     filter_columns:
