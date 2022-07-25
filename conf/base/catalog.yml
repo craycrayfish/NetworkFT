@@ -23,9 +23,9 @@ pri_txs:
     compression: GZIP
     index: false
 
-pri_txs_uni_agg:
+graph:
   type: pandas.ParquetDataSet
-  filepath: data\04_graph\nft_txs.parquet
+  filepath: data\04_graph\graph.parquet
   save_args:
     compression: GZIP
     index: false

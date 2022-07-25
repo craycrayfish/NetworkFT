@@ -51,3 +51,7 @@ covalent:
     value: sum
   time_cols:
     timestamp: 1W
+
+graph:
+  cols: ["timestamp", "collection_from", "collection_to", "value"]
+  other_collection_label: O

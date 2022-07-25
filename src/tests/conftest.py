@@ -53,7 +53,7 @@ def params():
             "tx_params": ["from", "to", "value"],
             "convert_wei": ["value"],
             "convert_timestamp": ["block_signed_at"],
-            "rename_columns": {"block_signed_at": "timestamp"}
+            "rename_columns": {"block_signed_at": "timestamp"},
         }
     }
     return flatten_dict(params)
@@ -90,5 +90,18 @@ def df_tx():
             ],
             "value": [0.0, 1.0],
             "name": ["Transfer", "Test"],
+        }
+    )
+
+
+@pytest.fixture(scope="module")
+def df_tx_graph():
+    return pd.DataFrame(
+        {
+            "timestamp": [0] * 7,
+            "collection": ["A", "B", "C", "D", "A", "B", "D"],
+            "entity": [1] * 4 + [2] * 3,
+            "direction": ["in", "in", "out", "out", "in", "in", "out"],
+            "value": [5, 10, 8, 14, 3, 5, 3],
         }
     )

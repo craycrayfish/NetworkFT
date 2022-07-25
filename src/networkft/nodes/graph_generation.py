@@ -39,13 +39,8 @@ def convert_to_unidirectional(
     return pd.concat(dfs).reset_index(drop=True)
 
 
-def agg_df(
-    df: pd.DataFrame,
-    cols: List,
-    agg: Dict,
-    time_cols: Dict = None
-):
-    """ Performs groupby and aggregate functions on dataframe
+def agg_df(df: pd.DataFrame, cols: List, agg: Dict, time_cols: Dict = None):
+    """Performs groupby and aggregate functions on dataframe
 
     Args:
         df: dataframe to be grouped
@@ -57,23 +52,28 @@ def agg_df(
     Returns:
         aggregated dataframe
     """
-    df_agg = df.groupby(
-        [
-            pd.Grouper(key=col, freq=time_cols[col]) if col in time_cols else col
-            for col in cols
-        ],
-    ).agg(agg).reset_index()
+    df_agg = (
+        df.groupby(
+            [
+                pd.Grouper(key=col, freq=time_cols[col]) if col in time_cols else col
+                for col in cols
+            ],
+        )
+        .agg(agg)
+        .reset_index()
+    )
     return df_agg
 
 
 def generate_edges(
-    df: pd.DataFrame,
-    other_collection_label: str = "O"
+    df: pd.DataFrame, cols_to_keep: List, other_collection_label: str = "O"
 ):
-    """ Generates edges for a dataframe of transactions
+    """Generates edges for a dataframe of transactions. Input dataframe should
+    contain the columns timestamp, entity, collection, direction, value
 
     Args:
         df: dataframe to generate edges from
+        cols_to_keep: columns to keep in returned dataframe
         other_collection_label: label for collections not included in dataset
 
     Returns:
@@ -81,29 +81,33 @@ def generate_edges(
     """
     # Find groups of trades that contain liquidity flow between collections
     # Internal means liquidity is contained within network
-    collection_dir_count = df.groupby(
-        ["timestamp", "entity"]
-    ).agg(
-        collection_count=("collection", lambda x: x.nunique()),
-        direction_count=("direction", lambda x: x.nunique())
-    ).reset_index()
-
-    df_direction = df.merge(collection_dir_count, on=["timestamp", "entity"])
-    internal_mask = (df_direction["direction_count"] > 1) & (df["collection_count"] > 1)
-
-    internal_edges = generate_internal_edges(
-        df_direction[internal_mask],
-        other_collection_label
+    collection_dir_count = (
+        df.groupby(["timestamp", "entity"])
+        .agg(
+            collection_count=("collection", lambda x: x.nunique()),
+            direction_count=("direction", lambda x: x.nunique()),
+        )
+        .reset_index()
     )
 
-    return df
+    df_direction = df.merge(collection_dir_count, on=["timestamp", "entity"])
+
+    internal_mask = (df_direction["direction_count"] > 1) & (
+        df_direction["collection_count"] > 1
+    )
+
+    internal_edges = generate_internal_edges(
+        df_direction[internal_mask], other_collection_label
+    )
+    external_edges = generate_external_edges(
+        df_direction[~internal_mask], other_collection_label
+    )
+    df_edges = pd.concat([internal_edges, external_edges]).reset_index(drop=True)
+    return df_edges[cols_to_keep]
 
 
-def generate_internal_edges(
-    df: pd.DataFrame,
-    other_collection_label: str
-):
-    """Generates edges contained within the
+def generate_internal_edges(df: pd.DataFrame, other_collection_label: str):
+    """Generates edges contained within the network of collections in the dataframe
 
     Args:
         df: dataframe containing transactions aggregated at a timestamp, collection,
@@ -128,31 +132,70 @@ def generate_internal_edges(
 
         # Determine expected transfer values using to and from values (not accounting
         # for liquidity constrains within the network)
-        df_from_to["expected_value_from"] = df_from_to["value_from"] * df_from_to[
-            "value_to"] / df_from_to["total_value_to"]
-        df_from_to["expected_value_to"] = df_from_to["value_to"] * df_from_to[
-            "value_from"] / df_from_to["total_value_from"]
+        df_from_to["expected_value_from"] = (
+            df_from_to["value_from"]
+            * df_from_to["value_to"]
+            / df_from_to["total_value_to"]
+        )
+        df_from_to["expected_value_to"] = (
+            df_from_to["value_to"]
+            * df_from_to["value_from"]
+            / df_from_to["total_value_from"]
+        )
         # Actual value transferred is constrained by the minimum
         df_from_to["value"] = df_from_to[
-            ["expected_value_from", "expected_value_to"]].min(axis=1)
+            ["expected_value_from", "expected_value_to"]
+        ].min(axis=1)
 
         dfs.append(df_from_to)
 
     df_edge_inter = pd.concat(dfs)
 
     # Next calculate liquidity injections and outflows
+    df_edge_inter["outflow"] = (
+        df_edge_inter["expected_value_from"] - df_edge_inter["expected_value_to"]
+    )
+
     outflow_mask = df_edge_inter["outflow"] > 0
 
-    outflows = df_edge_inter[outflow_mask].groupby(
-        ["timestamp", "collection_to"]
-    ).agg(value=("outflow", "sum")).reset_index()
+    outflows = (
+        df_edge_inter[outflow_mask]
+        .groupby(["timestamp", "collection_to"])
+        .agg(value=("outflow", "sum"))
+        .reset_index()
+    )
     outflows["collection_from"] = other_collection_label
 
-    inflows = df_edge_inter[~outflow_mask].groupby(
-        ["timestamp", "collection_from"]
-    ).agg(value=("outflow", "sum")).abs().reset_index()
+    inflows = (
+        df_edge_inter[~outflow_mask]
+        .groupby(["timestamp", "collection_from"])
+        .agg(value=("outflow", "sum"))
+        .abs()
+        .reset_index()
+    )
     inflows["collection_to"] = other_collection_label
 
-    return pd.concat([df_edge_inter, inflows, outflows])[[
-        "timestamp", "collection_to", "collection_from", "value"
-    ]]
+    return pd.concat([df_edge_inter, inflows, outflows])[
+        ["timestamp", "collection_to", "collection_from", "value"]
+    ].reset_index(drop=True)
+
+
+def generate_external_edges(df: pd.DataFrame, other_collection_label: str):
+    """Generates edges leading to collections outside the network
+
+    Args:
+        df: dataframe containing transactions aggregated at a timestamp, collection,
+        entity level
+        other_collection_label: label for collections not included in dataset
+
+    Returns:
+        dataframe of external edges
+    """
+    in_mask = df["direction"] == "in"
+    df_in = df[in_mask].copy().rename({"collection": "collection_to"}, axis=1)
+    df_in["collection_from"] = other_collection_label
+
+    df_out = df[~in_mask].copy().rename({"collection": "collection_from"}, axis=1)
+    df_out["collection_to"] = other_collection_label
+
+    return pd.concat([df_in, df_out]).reset_index(drop=True)

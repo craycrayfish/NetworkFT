@@ -15,8 +15,6 @@ def register_pipelines() -> Dict[str, Pipeline]:
         A mapping from a pipeline name to a ``Pipeline`` object.
     """
     covalent_pipeline = (
-            create_int_pipeline() +
-            create_pri_pipeline() +
-            create_graph_pipeline()
+        create_int_pipeline() + create_pri_pipeline() + create_graph_pipeline()
     )
     return {"__default__": covalent_pipeline, "covalent": covalent_pipeline}

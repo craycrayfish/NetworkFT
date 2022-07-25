@@ -28,17 +28,7 @@ def test_convert_wei(df_tx):
 
 
 def test_rename_columns():
-    df = pd.DataFrame(
-        {
-            "col_1": [1],
-            "col_2": [2]
-        }
-    )
+    df = pd.DataFrame({"col_1": [1], "col_2": [2]})
     df = rename_columns(df, {"col_1": "test_1"})
-    expected_df = pd.DataFrame(
-        {
-            "test_1": [1],
-            "col_2": [2]
-        }
-    )
+    expected_df = pd.DataFrame({"test_1": [1], "col_2": [2]})
     pd.testing.assert_frame_equal(df, expected_df)

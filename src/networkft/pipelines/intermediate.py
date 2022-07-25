@@ -37,10 +37,10 @@ def create_int_pipeline(**kwargs):
                 func=rename_columns,
                 inputs=[
                     "raw_covalent_txs_parsed_ts_wei",
-                    "params:covalent.rename_columns"
+                    "params:covalent.rename_columns",
                 ],
                 outputs="int_covalent_txs",
-                name="int_rename_columns"
-            )
+                name="int_rename_columns",
+            ),
         ]
     )
