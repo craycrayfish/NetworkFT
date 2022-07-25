@@ -23,6 +23,8 @@ covalent:
   # Conversion of column type
   convert_wei: [value]
   convert_timestamp: [block_signed_at]
+  rename_columns:
+    block_signed_at: timestamp
 
   # Filter to primary layer
   filter_columns:
@@ -35,3 +37,21 @@ covalent:
     value:
       condition: ">"
       value: 0
+
+  # Convert to unidirectional
+  convert_unidirectional:
+    cols:
+      from: in
+      to: out
+    entity_col: entity
+
+  # Project-level aggregation
+  groupby: ["timestamp", "collection", "entity", "direction"]
+  agg:
+    value: sum
+  time_cols:
+    timestamp: 1W
+
+graph:
+  cols: ["timestamp", "collection_from", "collection_to", "value"]
+  other_collection_label: O

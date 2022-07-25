@@ -9,9 +9,12 @@ def test_flatten():
     }
 
     expected_dictionary = {
+        "root": {"test_1": [0, 1], "test_2": {"1": 1, "2": "a"}},
         "root.test_1": [0, 1],
+        "root.test_2": {"1": 1, "2": "a"},
         "root.test_2.1": 1,
         "root.test_2.2": "a",
+        "root_2": {"test_3": "b"},
         "root_2.test_3": "b",
     }
 

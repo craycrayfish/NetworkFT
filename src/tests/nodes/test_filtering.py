@@ -2,7 +2,7 @@
 import pandas as pd
 import pytest
 
-from networkft.nodes.filtering import node_filter_dataframe
+from networkft.nodes.filtering import filter_dataframe
 
 
 @pytest.fixture
@@ -22,9 +22,9 @@ def filter_columns_numeric():
 
 def test_node_filter_dataframe(df_tx, filter_columns_string, filter_columns_numeric):
     """Test that node is able to filter both string and numeric successfully"""
-    df = node_filter_dataframe(df_tx, filter_columns_string)
+    df = filter_dataframe(df_tx, filter_columns_string)
     expected_df = df_tx.iloc[0:1, :]
     pd.testing.assert_frame_equal(df, expected_df)
 
-    df = node_filter_dataframe(df_tx, filter_columns_numeric)
+    df = filter_dataframe(df_tx, filter_columns_numeric)
     pd.testing.assert_frame_equal(df, expected_df)
