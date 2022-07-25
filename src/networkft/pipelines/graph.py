@@ -4,8 +4,8 @@ representing a graph of money flow between projects
 from kedro.pipeline import Pipeline, node
 
 from networkft.nodes.graph_generation import (
-    convert_to_unidirectional,
     agg_df,
+    convert_to_unidirectional,
     generate_edges,
 )
 

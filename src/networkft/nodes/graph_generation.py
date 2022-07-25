@@ -1,7 +1,7 @@
 """Nodes to generate graph of capital flow between projects"""
 from typing import Dict, List
+
 import pandas as pd
-from typing import List
 
 
 def convert_to_unidirectional(

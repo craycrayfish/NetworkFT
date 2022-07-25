@@ -3,9 +3,9 @@ from typing import Dict
 
 from kedro.pipeline import Pipeline
 
+from networkft.pipelines.graph import create_graph_pipeline
 from networkft.pipelines.intermediate import create_int_pipeline
 from networkft.pipelines.primary import create_pri_pipeline
-from networkft.pipelines.graph import create_graph_pipeline
 
 
 def register_pipelines() -> Dict[str, Pipeline]:

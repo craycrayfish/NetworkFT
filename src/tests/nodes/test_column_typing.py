@@ -3,7 +3,11 @@ from datetime import datetime, timezone
 
 import pandas as pd
 
-from networkft.nodes.column_typing import convert_timestamp, convert_wei, rename_columns
+from networkft.nodes.column_typing import (
+    convert_timestamp,
+    convert_wei,
+    rename_columns,
+)
 
 
 def test_convert_timestamp(df_tx):

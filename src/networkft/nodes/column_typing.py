@@ -1,5 +1,5 @@
 """Nodes to enforce column schema"""
-from typing import List, Union, Dict
+from typing import Dict, List, Union
 
 import pandas as pd
 from web3 import Web3

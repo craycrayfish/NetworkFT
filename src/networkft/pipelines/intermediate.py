@@ -4,7 +4,11 @@ Transforms raw data to intermediate layer
 
 from kedro.pipeline import Pipeline, node
 
-from networkft.nodes.column_typing import convert_timestamp, convert_wei, rename_columns
+from networkft.nodes.column_typing import (
+    convert_timestamp,
+    convert_wei,
+    rename_columns,
+)
 from networkft.nodes.covalent_txs import parse_covalent_txs
 
 

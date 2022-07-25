@@ -1,13 +1,14 @@
 """Tests for graph generation nodes"""
-import pandas as pd
 from datetime import datetime, timezone
 
+import pandas as pd
+
 from networkft.nodes.graph_generation import (
-    convert_to_unidirectional,
     agg_df,
+    convert_to_unidirectional,
     generate_edges,
-    generate_internal_edges,
     generate_external_edges,
+    generate_internal_edges,
 )
 
 DT_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
