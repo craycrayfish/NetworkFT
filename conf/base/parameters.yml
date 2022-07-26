@@ -55,3 +55,7 @@ covalent:
 graph:
   cols: ["timestamp", "collection_from", "collection_to", "value"]
   other_collection_label: O
+
+ui:
+  run_params:
+    debug: true
