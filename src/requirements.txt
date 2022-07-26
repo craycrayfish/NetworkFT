@@ -14,3 +14,6 @@ pytest-mock>=1.7.1, <2.0
 pytest~=6.2
 tqdm>=4.64
 web3~=5.3
+
+dash>=2.5.0
+dash-bootstrap-components>=1.2.0
