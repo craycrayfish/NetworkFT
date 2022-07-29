@@ -10,7 +10,7 @@ def create_ui_pipeline(**kwargs):
         [
             node(
                 func=run_dashboard,
-                inputs=["graph", "params:ui.run_params"],
+                inputs=["graph", "params:ui.run_params", "params:graph"],
                 outputs=None,
                 name="ui",
             )
