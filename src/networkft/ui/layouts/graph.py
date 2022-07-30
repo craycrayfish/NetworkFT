@@ -2,10 +2,10 @@
 from typing import Dict
 from dash import html
 import dash_bootstrap_components as dbc
+import plotly.graph_objects as go
 import pandas as pd
 
-from networkft.ui.utils.node_operations import calculate_node_positions
-from networkft.ui.utils.edge_operations import calculate_edges
+from networkft.ui.styles import Styles
 
 
 def create_graph(graph: pd.DataFrame, graph_params: Dict[str, str]):
@@ -19,5 +19,17 @@ def create_graph(graph: pd.DataFrame, graph_params: Dict[str, str]):
     Returns:
         graph layout object
     """
-    node_positions = calculate_node_positions(graph, graph_params)
-    edges = calculate_edges(graph, graph_params, node_positions)
+
+    fig = go.Figure(layout=go.Layout(**Styles.graph_layout))
+    fig.add_trace(
+        go.Scatter(
+            x=node_positions["x"],
+            y=node_positions["y"],
+            mode="markers"
+        )
+    )
+
+    fig.update_xaxes(**Styles.axes)
+    fig.update_yaxes(**Styles.axes)
+
+    return fig
