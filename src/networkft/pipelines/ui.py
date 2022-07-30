@@ -12,13 +12,13 @@ def create_ui_pipeline(**kwargs):
                 func=generate_ui_datasets,
                 inputs=["graph", "params:graph"],
                 outputs="ui_datasets",
-                name="generate_ui_datasets"
+                name="generate_ui_datasets",
             ),
             node(
                 func=run_dashboard,
                 inputs=["ui_datasets", "params:ui.run_params"],
                 outputs=None,
                 name="ui",
-            )
+            ),
         ]
     )

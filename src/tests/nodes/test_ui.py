@@ -1,13 +1,13 @@
 """Test functions used to create the datasets required for ui"""
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pytest
 
 from networkft.nodes.ui import (
-    calculate_node_positions,
     calculate_edges,
+    calculate_node_positions,
     calculate_node_sizes,
-    generate_ui_datasets
+    generate_ui_datasets,
 )
 
 
@@ -18,19 +18,19 @@ def graph_params():
 
 @pytest.fixture
 def graph():
-    """ Corresponds to the edges below """
+    """Corresponds to the edges below"""
     return pd.DataFrame(
         {
             "collection_from": ["A", "B", "A", "A"],
             "collection_to": ["B", "A", "B", "C"],
-            "value": [1, 2, 3, 4]
+            "value": [1, 2, 3, 4],
         }
     )
 
 
 @pytest.fixture
 def edges():
-    """ Corresponds to the graph above """
+    """Corresponds to the graph above"""
     return pd.DataFrame(
         {
             "collection": ["A,B", "A,C"],
@@ -51,13 +51,13 @@ def test_generate_ui_datasets(graph, graph_params, edges):
             "nodes": pd.DataFrame(
                 {
                     "node": ["A", "B", "C"],
-                    "x": [0., np.sin(np.pi * 2 / 3), np.sin(np.pi * 4 / 3)],
-                    "y": [1., np.cos(np.pi * 2 / 3), np.cos(np.pi * 4 / 3)],
+                    "x": [0.0, np.sin(np.pi * 2 / 3), np.sin(np.pi * 4 / 3)],
+                    "y": [1.0, np.cos(np.pi * 2 / 3), np.cos(np.pi * 4 / 3)],
                     "total_flow": [10, 6, 4],
-                    "size": [1, 0.6, 0.4]
+                    "size": [1, 0.6, 0.4],
                 }
             ),
-            "edges": edges
+            "edges": edges,
         }
     }
     for ts, datasets in ui_datasets.items():
@@ -70,8 +70,8 @@ def test_calculate_node_positions(graph, graph_params):
     expected_positions = pd.DataFrame(
         {
             "node": ["A", "B", "C"],
-            "x": [0., np.sin(np.pi * 2 / 3), np.sin(np.pi * 4 / 3)],
-            "y": [1., np.cos(np.pi * 2 / 3), np.cos(np.pi * 4 / 3)]
+            "x": [0.0, np.sin(np.pi * 2 / 3), np.sin(np.pi * 4 / 3)],
+            "y": [1.0, np.cos(np.pi * 2 / 3), np.cos(np.pi * 4 / 3)],
         }
     )
     pd.testing.assert_frame_equal(positions, expected_positions, check_exact=False)
@@ -84,10 +84,6 @@ def test_calculate_edges(graph, edges):
 def test_calculate_node_sizes(edges):
     node_sizes = calculate_node_sizes(edges)
     expected_node_sizes = pd.DataFrame(
-        {
-            "collection": ["A", "B", "C"],
-            "total_flow": [10, 6, 4],
-            "size": [1, 0.6, 0.4]
-        }
+        {"collection": ["A", "B", "C"], "total_flow": [10, 6, 4], "size": [1, 0.6, 0.4]}
     )
     pd.testing.assert_frame_equal(node_sizes, expected_node_sizes)

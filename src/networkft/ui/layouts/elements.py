@@ -1,14 +1,15 @@
 """Elements to be used in main layout
 """
-from typing import List
-from dash import dcc
 from datetime import datetime
+from typing import List
+
+from dash import dcc
 
 from networkft.ui.styles import Format
 
 
 def timestamp_slider(_timestamps: List, max_marks: int = 5) -> dcc.Slider:
-    """ Creates slider to select timestamp to display
+    """Creates slider to select timestamp to display
 
     Args:
         _timestamps: list of all timestamps to include
@@ -33,5 +34,5 @@ def timestamp_slider(_timestamps: List, max_marks: int = 5) -> dcc.Slider:
         max=timestamp_values[-1],
         value=timestamp_values[-1],
         step=None,
-        marks=marks
+        marks=marks,
     )
