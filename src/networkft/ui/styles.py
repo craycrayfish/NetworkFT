@@ -16,8 +16,8 @@ class Colors:
 class Layout:
     """Layout formatting
     """
-    left_col = 2
-    right_col = 8
+    left_col = {"size": 2, "offset": 1}
+    right_col = {"size": 8}
 
 
 class Format:
@@ -39,6 +39,9 @@ class Styles:
     text = {
         "color": Colors.text_primary
     }
+
+    header_row = {"margin": "0 0 1rem 0"}
+    body_row = {"margin": "1rem 0"}
 
     graph_layout = {
         "paper_bgcolor": "rgba(0,0,0,0)",

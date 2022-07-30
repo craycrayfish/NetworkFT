@@ -17,9 +17,16 @@ def create_main_layout(
         [
             dbc.Row(
                 [
+                    dbc.Col(html.Div(html.H1("NetworkFT")), width=Layout.left_col)
+                ],
+                style=Styles.header_row
+            ),
+            dbc.Row(
+                [
                     dbc.Col(html.Div("menu"), width=Layout.left_col),
                     dbc.Col(dcc.Graph(id="graph"), width=Layout.right_col)
-                ]
+                ],
+                style=Styles.body_row
             ),
             dbc.Row(
                 [

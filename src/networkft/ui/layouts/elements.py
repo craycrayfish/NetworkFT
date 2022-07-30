@@ -20,17 +20,18 @@ def timestamp_slider(_timestamps: List, max_marks: int = 5) -> dcc.Slider:
     timestamps = sorted(_timestamps)
     interval = int(len(timestamps) / max_marks)
     # Find required remainder for the last timestamp to be shown
-    mod = len(timestamps) % interval
+    mod = len(timestamps) % interval - 1
     marks = {
-        i: {"label": datetime.strptime(ts, Format.dt)}
+        i: {"label": datetime.strftime(ts, Format.dt)}
         if i % interval == mod
         else {"label": ""}
         for i, ts in enumerate(timestamps)
     }
+    timestamp_values = list(marks)
     return dcc.Slider(
-        min=timestamps[0],
-        max=timestamps[-1],
-        value=timestamps[-1],
+        min=timestamp_values[0],
+        max=timestamp_values[-1],
+        value=timestamp_values[-1],
         step=None,
         marks=marks
     )
