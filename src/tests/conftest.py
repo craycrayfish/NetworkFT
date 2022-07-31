@@ -52,7 +52,7 @@ def params():
             "tx_params": ["from", "to", "value"],
             "convert_wei": ["value"],
             "convert_timestamp": ["block_signed_at"],
-            "rename_columns": {"block_signed_at": "timestamp"},
+            "rename_columns": {"block_signed_at": "timestamp", "collection": "node"},
         }
     }
     return flatten_dict(params)
@@ -69,7 +69,7 @@ def test_catalog(catalog_config, params):
 def df_tx():
     return pd.DataFrame(
         {
-            "collection": ["test", "test"],
+            "node": ["test", "test"],
             "token_id": ["0", "1"],
             "timestamp": [
                 datetime.strptime("2022-01-01T01:23:45Z", DT_FORMAT).replace(
@@ -98,7 +98,7 @@ def df_tx_graph():
     return pd.DataFrame(
         {
             "timestamp": [0] * 7,
-            "collection": ["A", "B", "C", "D", "A", "B", "D"],
+            "node": ["A", "B", "C", "D", "A", "B", "D"],
             "entity": [1] * 4 + [2] * 3,
             "direction": ["in", "in", "out", "out", "in", "in", "out"],
             "value": [5, 10, 8, 14, 3, 5, 3],

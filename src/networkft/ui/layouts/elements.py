@@ -35,4 +35,5 @@ def timestamp_slider(_timestamps: List, max_marks: int = 5) -> dcc.Slider:
         value=timestamp_values[-1],
         step=None,
         marks=marks,
+        id="timestamp_slider"
     )

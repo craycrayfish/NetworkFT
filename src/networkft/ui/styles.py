@@ -41,11 +41,35 @@ class Styles:
     header_row = {"margin": "0 0 1rem 0"}
     body_row = {"margin": "1rem 0"}
 
-    graph_layout = {"paper_bgcolor": "rgba(0,0,0,0)", "plot_bgcolor": "rgba(0,0,0,0)"}
+    graph = {"height": "70vh"}
+
+    graph_layout = {
+        "paper_bgcolor": "rgba(0,0,0,0)",
+        "plot_bgcolor": "rgba(0,0,0,0)",
+    }
 
     axes = {
         "showline": False,
         "showgrid": False,
         "zeroline": False,
         "showticklabels": False,
+    }
+
+    yaxes = {
+        "scaleanchor": "x",
+        "scaleratio": 1
+    }
+
+
+class Graph:
+    """Arguments to control graph formatting"""
+    node_scaling = 0.5
+    max_node_size = 180
+    min_node_size = 30
+
+    edge_scaling = 0.5
+    max_edge_width = 100
+
+    annotation_text = {
+        "color": Colors.text_primary
     }

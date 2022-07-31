@@ -18,7 +18,7 @@ def test_convert_to_unidirectional(df_tx):
     df = convert_to_unidirectional(df_tx)
     expected_df = pd.DataFrame(
         {
-            "collection": ["test"] * 4,
+            "node": ["test"] * 4,
             "token_id": ["0", "1", "0", "1"],
             "timestamp": [
                 datetime.strptime("2022-01-01T01:23:45Z", DT_FORMAT).replace(
@@ -50,7 +50,7 @@ def test_convert_to_unidirectional(df_tx):
 
 def test_agg_df(df_tx):
     df = agg_df(
-        df_tx, ["timestamp", "collection"], {"value": "sum"}, {"timestamp": "1Y"}
+        df_tx, ["timestamp", "node"], {"value": "sum"}, {"timestamp": "1Y"}
     )
     expected_df = pd.DataFrame(
         {
@@ -59,7 +59,7 @@ def test_agg_df(df_tx):
                     tzinfo=timezone.utc
                 )
             ],
-            "collection": ["test"],
+            "node": ["test"],
             "value": [1.0],
         }
     )
@@ -71,8 +71,8 @@ def test_generate_internal_edges(df_tx_graph):
     expected_df = pd.DataFrame(
         {
             "timestamp": [0] * 9,
-            "collection_to": ["C", "D", "C", "D", "D", "D", "O", "O", "D"],
-            "collection_from": ["A", "A", "B", "B", "A", "B", "A", "B", "O"],
+            "node_to": ["C", "D", "C", "D", "D", "D", "O", "O", "D"],
+            "node_from": ["A", "A", "B", "B", "A", "B", "A", "B", "O"],
             "value": [
                 1.8181818,
                 3.18181818,
@@ -98,11 +98,11 @@ def test_generate_external_edges(df_tx_graph):
     df_expected = pd.DataFrame(
         {
             "timestamp": [0] * 7,
-            "collection_to": ["A", "B", "A", "B", "O", "O", "O"],
+            "node_to": ["A", "B", "A", "B", "O", "O", "O"],
             "entity": [1, 1, 2, 2, 1, 1, 2],
             "direction": ["in"] * 4 + ["out"] * 3,
             "value": [5, 10, 3, 5, 8, 14, 3],
-            "collection_from": ["O"] * 4 + ["C", "D", "D"],
+            "node_from": ["O"] * 4 + ["C", "D", "D"],
         }
     )
     pd.testing.assert_frame_equal(df, df_expected)
@@ -115,7 +115,7 @@ def test_generate_edges(df_tx_graph):
             pd.DataFrame(
                 {
                     "timestamp": [1],
-                    "collection": ["A"],
+                    "node": ["A"],
                     "entity": [1],
                     "direction": ["in"],
                     "value": [5],
@@ -126,13 +126,13 @@ def test_generate_edges(df_tx_graph):
 
     df = generate_edges(
         df_tx_graph_extra,
-        cols_to_keep=["timestamp", "collection_from", "collection_to", "value"],
+        cols_to_keep=["timestamp", "node_from", "node_to", "value"],
     )
     expected_df = pd.DataFrame(
         {
             "timestamp": [0] * 9 + [1],
-            "collection_from": ["A", "A", "B", "B", "A", "B", "A", "B", "O", "O"],
-            "collection_to": ["C", "D", "C", "D", "D", "D", "O", "O", "D", "A"],
+            "node_from": ["A", "A", "B", "B", "A", "B", "A", "B", "O", "O"],
+            "node_to": ["C", "D", "C", "D", "D", "D", "O", "O", "D", "A"],
             "value": [
                 1.8181818,
                 3.18181818,

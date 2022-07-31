@@ -11,6 +11,6 @@ from networkft.ui.layouts.main import create_main_layout
 def create_dash_app(ui_datasets: Dict[datetime, Dict[str, pd.DataFrame]]):
     app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-    app.layout = create_main_layout(ui_datasets)
+    app.layout = create_main_layout(app, ui_datasets)
 
     return app
