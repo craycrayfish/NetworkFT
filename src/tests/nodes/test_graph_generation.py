@@ -49,9 +49,7 @@ def test_convert_to_unidirectional(df_tx):
 
 
 def test_agg_df(df_tx):
-    df = agg_df(
-        df_tx, ["timestamp", "node"], {"value": "sum"}, {"timestamp": "1Y"}
-    )
+    df = agg_df(df_tx, ["timestamp", "node"], {"value": "sum"}, {"timestamp": "1Y"})
     expected_df = pd.DataFrame(
         {
             "timestamp": [
@@ -97,12 +95,12 @@ def test_generate_external_edges(df_tx_graph):
     df = generate_external_edges(df_tx_graph, "O")
     df_expected = pd.DataFrame(
         {
-            "timestamp": [0] * 7,
-            "node_to": ["A", "B", "A", "B", "O", "O", "O"],
-            "entity": [1, 1, 2, 2, 1, 1, 2],
-            "direction": ["in"] * 4 + ["out"] * 3,
-            "value": [5, 10, 3, 5, 8, 14, 3],
-            "node_from": ["O"] * 4 + ["C", "D", "D"],
+            "timestamp": [0] * 4,
+            "node_to": ["A", "B", "A", "B"],
+            "entity": [1, 1, 2, 2],
+            "direction": ["in"] * 4,
+            "value": [5, 10, 3, 5],
+            "node_from": ["O"] * 4,
         }
     )
     pd.testing.assert_frame_equal(df, df_expected)

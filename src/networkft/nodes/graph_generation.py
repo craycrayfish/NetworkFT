@@ -65,9 +65,7 @@ def agg_df(df: pd.DataFrame, cols: List, agg: Dict, time_cols: Dict = None):
     return df_agg
 
 
-def generate_edges(
-    df: pd.DataFrame, cols_to_keep: List, other_node_label: str = "O"
-):
+def generate_edges(df: pd.DataFrame, cols_to_keep: List, other_node_label: str = "O"):
     """Generates edges for a dataframe of transactions. Input dataframe should
     contain the columns timestamp, entity, node, direction, value
 
@@ -192,10 +190,9 @@ def generate_external_edges(df: pd.DataFrame, other_node_label: str):
         dataframe of external edges
     """
     in_mask = df["direction"] == "in"
-    df_in = df[in_mask].copy().rename({"node": "node_to"}, axis=1)
+    df_in = (
+        df[in_mask].copy().rename({"node": "node_to"}, axis=1).reset_index(drop=True)
+    )
     df_in["node_from"] = other_node_label
 
-    df_out = df[~in_mask].copy().rename({"node": "node_from"}, axis=1)
-    df_out["node_to"] = other_node_label
-
-    return pd.concat([df_in, df_out]).reset_index(drop=True)
+    return df_in

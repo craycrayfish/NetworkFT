@@ -23,9 +23,28 @@ pri_txs:
     compression: GZIP
     index: false
 
+pri_txs_uni:
+  type: pandas.ParquetDataSet
+  filepath: data\03_primary\nft_txs_uni.parquet
+  save_args:
+    compression: GZIP
+    index: false
+
+pri_txs_uni_agg:
+  type: pandas.ParquetDataSet
+  filepath: data\03_primary\nft_txs_uni_agg.parquet
+  save_args:
+    compression: GZIP
+    index: false
+
 graph:
   type: pandas.ParquetDataSet
   filepath: data\04_graph\graph.parquet
   save_args:
     compression: GZIP
     index: false
+
+ui_datasets:
+  type: pickle.PickleDataSet
+  filepath: data\05_ui\ui_datasets.pkl
+  backend: pickle

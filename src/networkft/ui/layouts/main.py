@@ -4,7 +4,7 @@ from typing import Dict
 
 import dash_bootstrap_components as dbc
 import pandas as pd
-from dash import dcc, html, Output, Input
+from dash import Input, Output, dcc, html
 from dash.dash import Dash
 
 from networkft.ui.layouts.elements import timestamp_slider
@@ -21,10 +21,10 @@ def create_main_layout(app: Dash, ui_datasets: Dict[datetime, Dict[str, pd.DataF
             ),
             dbc.Row(
                 [
-                    dbc.Col(html.Div("menu"), width=Layout.left_col),
+                    dbc.Col(html.Div(), width=Layout.left_col),
                     dbc.Col(
                         dcc.Graph(id="graph", style=Styles.graph),
-                        width=Layout.right_col
+                        width=Layout.right_col,
                     ),
                 ],
                 style=Styles.body_row,
@@ -41,12 +41,9 @@ def create_main_layout(app: Dash, ui_datasets: Dict[datetime, Dict[str, pd.DataF
         style=Styles.background_container,
     )
 
-    @app.callback(
-        Output("graph", "figure"),
-        Input("timestamp_slider", "value")
-    )
+    @app.callback(Output("graph", "figure"), Input("timestamp_slider", "value"))
     def update_graph(timestamp):
-        """ Updates the graph based on the selected timestamp
+        """Updates the graph based on the selected timestamp
 
         Args:
             timestamp: integer index of the selected timestamp
@@ -58,4 +55,3 @@ def create_main_layout(app: Dash, ui_datasets: Dict[datetime, Dict[str, pd.DataF
         return draw_graph(dataset["nodes"], dataset["edges"])
 
     return layout
-

@@ -27,10 +27,8 @@ def generate_ui_datasets(
         edges = calculate_edges(group)
         edge_positions = calculate_edge_positions(edges, node_positions)
         node_sizes = calculate_node_sizes(edges)
-        nodes = node_positions.merge(
-            node_sizes, on="node"
-        )
-        output[timestamp] = {"nodes": nodes, "edges": edges}
+        nodes = node_positions.merge(node_sizes, on="node")
+        output[timestamp] = {"nodes": nodes, "edges": edge_positions}
     return output
 
 
@@ -47,9 +45,7 @@ def calculate_node_positions(
         Dictionary of nodes and their x, y coordinates
     """
     # First get all nodes
-    nodes = (
-        pd.concat([graph["node_from"], graph["node_to"]]).unique().tolist()
-    )
+    nodes = pd.concat([graph["node_from"], graph["node_to"]]).unique().tolist()
     if graph_params["other_node_label"] in nodes:
         nodes.remove(graph_params["other_node_label"])
 
@@ -60,9 +56,11 @@ def calculate_node_positions(
     }
     # Other nodes should be in the center
     node_positions[graph_params["other_node_label"]] = [0, 0]
-    return pd.DataFrame.from_dict(
-        node_positions, orient="index", columns=["x", "y"]
-    ).reset_index().rename(columns={"index": "node"})
+    return (
+        pd.DataFrame.from_dict(node_positions, orient="index", columns=["x", "y"])
+        .reset_index()
+        .rename(columns={"index": "node"})
+    )
 
 
 def calculate_edges(
@@ -144,7 +142,7 @@ def run_dashboard(
 
 
 def calculate_edge_positions(_edges: pd.DataFrame, node_positions: pd.DataFrame):
-    """ Calculates the coordindates required to plot an edge from (x, y) and to (x, y)
+    """Calculates the coordindates required to plot an edge from (x, y) and to (x, y)
 
     Args:
         _edges: dataframe of edges
@@ -158,7 +156,7 @@ def calculate_edge_positions(_edges: pd.DataFrame, node_positions: pd.DataFrame)
     edges = _edges.copy()
     for direction in ["from", "to"]:
         edges = edges.merge(
-            node_positions.rename(columns=lambda x: x+f"_{direction}"),
+            node_positions.rename(columns=lambda x: x + f"_{direction}"),
             on=f"node_{direction}",
             how="left",
         )

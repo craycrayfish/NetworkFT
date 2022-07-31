@@ -21,7 +21,7 @@ def register_pipelines() -> Dict[str, Pipeline]:
 
     ui_pipeline = create_ui_pipeline()
 
-    e2e_pipeline = covalent_pipeline + (ui_pipeline, )
+    e2e_pipeline = covalent_pipeline + ui_pipeline
 
     return {
         "__default__": e2e_pipeline,
