@@ -2,6 +2,8 @@
 
 ## Overview
 
+NetworkFT is a data pipelining asset for Web 3 blockchain data. 
+
 This is your new Kedro project, which was generated using `Kedro 0.18.1`.
 
 Take a look at the [Kedro documentation](https://kedro.readthedocs.io) to get started.
