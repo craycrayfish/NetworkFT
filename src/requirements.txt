@@ -6,7 +6,6 @@ jupyter~=1.0
 jupyterlab~=3.0
 kedro~=0.18.2
 kedro[pandas]
-kedro-viz>=4.7.2
 nbstripout~=0.4
 pandas>=1.4
 pytest-cov~=3.0
