@@ -20,7 +20,7 @@ jobs:
         echo $CONDA/bin >> $GITHUB_PATH
     - name: Install requirements
       run: |
-        pip install --no-deps -r ./src/requirements.txt
+        pip install -r ./src/requirements.txt
     - name: Lint with kedro
       run: |
         kedro lint
