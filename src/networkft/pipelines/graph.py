@@ -39,7 +39,7 @@ def create_graph_pipeline(**kwargs):
                 inputs=[
                     "pri_txs_uni_agg",
                     "params:graph.cols",
-                    "params:graph.other_collection_label",
+                    "params:graph.other_node_label",
                 ],
                 outputs="graph",
                 name="generate_graph_edges",

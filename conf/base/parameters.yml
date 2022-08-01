@@ -25,6 +25,7 @@ covalent:
   convert_timestamp: [block_signed_at]
   rename_columns:
     block_signed_at: timestamp
+    collection: node
 
   # Filter to primary layer
   filter_columns:
@@ -46,15 +47,15 @@ covalent:
     entity_col: entity
 
   # Project-level aggregation
-  groupby: ["timestamp", "collection", "entity", "direction"]
+  groupby: ["timestamp", "node", "entity", "direction"]
   agg:
     value: sum
   time_cols:
     timestamp: 1W
 
 graph:
-  cols: ["timestamp", "collection_from", "collection_to", "value"]
-  other_collection_label: O
+  cols: ["timestamp", "node_from", "node_to", "value"]
+  other_node_label: others
 
 ui:
   run_params:

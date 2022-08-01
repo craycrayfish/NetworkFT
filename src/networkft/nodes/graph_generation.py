@@ -65,60 +65,58 @@ def agg_df(df: pd.DataFrame, cols: List, agg: Dict, time_cols: Dict = None):
     return df_agg
 
 
-def generate_edges(
-    df: pd.DataFrame, cols_to_keep: List, other_collection_label: str = "O"
-):
+def generate_edges(df: pd.DataFrame, cols_to_keep: List, other_node_label: str = "O"):
     """Generates edges for a dataframe of transactions. Input dataframe should
-    contain the columns timestamp, entity, collection, direction, value
+    contain the columns timestamp, entity, node, direction, value
 
     Args:
         df: dataframe to generate edges from
         cols_to_keep: columns to keep in returned dataframe
-        other_collection_label: label for collections not included in dataset
+        other_node_label: label for nodes not included in dataset
 
     Returns:
         dataframe containing edges
     """
-    # Find groups of trades that contain liquidity flow between collections
+    # Find groups of trades that contain liquidity flow between nodes
     # Internal means liquidity is contained within network
-    collection_dir_count = (
+    node_dir_count = (
         df.groupby(["timestamp", "entity"])
         .agg(
-            collection_count=("collection", lambda x: x.nunique()),
+            node_count=("node", lambda x: x.nunique()),
             direction_count=("direction", lambda x: x.nunique()),
         )
         .reset_index()
     )
 
-    df_direction = df.merge(collection_dir_count, on=["timestamp", "entity"])
+    df_direction = df.merge(node_dir_count, on=["timestamp", "entity"])
 
     internal_mask = (df_direction["direction_count"] > 1) & (
-        df_direction["collection_count"] > 1
+        df_direction["node_count"] > 1
     )
 
     internal_edges = generate_internal_edges(
-        df_direction[internal_mask], other_collection_label
+        df_direction[internal_mask], other_node_label
     )
     external_edges = generate_external_edges(
-        df_direction[~internal_mask], other_collection_label
+        df_direction[~internal_mask], other_node_label
     )
     df_edges = pd.concat([internal_edges, external_edges]).reset_index(drop=True)
     return df_edges[cols_to_keep]
 
 
-def generate_internal_edges(df: pd.DataFrame, other_collection_label: str):
-    """Generates edges contained within the network of collections in the dataframe
+def generate_internal_edges(df: pd.DataFrame, other_node_label: str):
+    """Generates edges contained within the network of nodes in the dataframe
 
     Args:
-        df: dataframe containing transactions aggregated at a timestamp, collection,
+        df: dataframe containing transactions aggregated at a timestamp, node,
         entity level
-        other_collection_label: label for collections not included in dataset
+        other_node_label: label for nodes not included in dataset
 
     Returns:
         dataframe of internal edges (and external where necessary)
     """
     dfs = []
-    # First calculate liquidity flow within the collections
+    # First calculate liquidity flow within the nodes
     for index, group in df.groupby("entity"):
         # Get total value going into and out of the network
         df_from = group[group["direction"] == "in"].copy()
@@ -160,42 +158,41 @@ def generate_internal_edges(df: pd.DataFrame, other_collection_label: str):
 
     outflows = (
         df_edge_inter[outflow_mask]
-        .groupby(["timestamp", "collection_to"])
+        .groupby(["timestamp", "node_to"])
         .agg(value=("outflow", "sum"))
         .reset_index()
     )
-    outflows["collection_from"] = other_collection_label
+    outflows["node_from"] = other_node_label
 
     inflows = (
         df_edge_inter[~outflow_mask]
-        .groupby(["timestamp", "collection_from"])
+        .groupby(["timestamp", "node_from"])
         .agg(value=("outflow", "sum"))
         .abs()
         .reset_index()
     )
-    inflows["collection_to"] = other_collection_label
+    inflows["node_to"] = other_node_label
 
     return pd.concat([df_edge_inter, inflows, outflows])[
-        ["timestamp", "collection_to", "collection_from", "value"]
+        ["timestamp", "node_to", "node_from", "value"]
     ].reset_index(drop=True)
 
 
-def generate_external_edges(df: pd.DataFrame, other_collection_label: str):
-    """Generates edges leading to collections outside the network
+def generate_external_edges(df: pd.DataFrame, other_node_label: str):
+    """Generates edges leading to nodes outside the network
 
     Args:
-        df: dataframe containing transactions aggregated at a timestamp, collection,
+        df: dataframe containing transactions aggregated at a timestamp, node,
         entity level
-        other_collection_label: label for collections not included in dataset
+        other_node_label: label for nodes not included in dataset
 
     Returns:
         dataframe of external edges
     """
     in_mask = df["direction"] == "in"
-    df_in = df[in_mask].copy().rename({"collection": "collection_to"}, axis=1)
-    df_in["collection_from"] = other_collection_label
+    df_in = (
+        df[in_mask].copy().rename({"node": "node_to"}, axis=1).reset_index(drop=True)
+    )
+    df_in["node_from"] = other_node_label
 
-    df_out = df[~in_mask].copy().rename({"collection": "collection_from"}, axis=1)
-    df_out["collection_to"] = other_collection_label
-
-    return pd.concat([df_in, df_out]).reset_index(drop=True)
+    return df_in

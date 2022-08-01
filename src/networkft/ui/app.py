@@ -1,31 +1,16 @@
+from datetime import datetime
+from typing import Dict
+
+import dash_bootstrap_components as dbc
 import pandas as pd
-import plotly.express as px
-from dash import Dash, dcc, html
+from dash import Dash
+
+from networkft.ui.layouts.main import create_main_layout
 
 
-def create_dash_app(graph):
-    app = Dash(__name__)
+def create_dash_app(ui_datasets: Dict[datetime, Dict[str, pd.DataFrame]]):
+    app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-    df = pd.DataFrame(
-        {
-            "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-            "Amount": [4, 1, 2, 2, 4, 5],
-            "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"],
-        }
-    )
-
-    fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
-
-    app.layout = html.Div(
-        children=[
-            html.H1(children="Hello Dash"),
-            html.Div(
-                children="""
-            Dash: A web application framework for your data.
-        """
-            ),
-            dcc.Graph(id="example-graph", figure=fig),
-        ]
-    )
+    app.layout = create_main_layout(app, ui_datasets)
 
     return app
