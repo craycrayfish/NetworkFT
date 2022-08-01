@@ -2,38 +2,66 @@
 
 ## Overview
 
-NetworkFT is a data pipelining asset for Web 3 blockchain data. 
 
-This is your new Kedro project, which was generated using `Kedro 0.18.1`.
+NetworkFT is a platform for visualising the flow of liquidity between NFT projects. 
+An example is shown below.
 
-Take a look at the [Kedro documentation](https://kedro.readthedocs.io) to get started.
+![Dashboard example](docs/img/dashboard.png)
 
-## Rules and guidelines
+The real value of the project, however, lies in the framework used to develop the 
+platform. Under the hood, the library contains a collection of modules for web3 
+analytics use cases. Ultimately, it is a data pipelining asset for web3 data 
+intended to be used for:
 
-In order to get the best out of the template:
+- Integrating web3 data with existing analytics infrastructure
+- Setting up back-end for web3 analytics / AI applications
 
-* Don't remove any lines from the `.gitignore` file we provide
-* Make sure your results can be reproduced by following a [data engineering convention](https://kedro.readthedocs.io/en/stable/faq/faq.html#what-is-data-engineering-convention)
-* Don't commit data to your repository
-* Don't commit any credentials or your local configuration to your repository. Keep all your credentials and local configuration in `conf/local/`
+but is by no means limited to these situations. The modular nature of this asset 
+enables it to be used in a flexible range of scenarios.
+
+NetworkFT has been developed using Kedro, an opened-sourced Python framework 
+for creating reproducible, maintainable and modular data science code. Take a look at 
+the [Kedro documentation](https://kedro.readthedocs.io) for more information.
 
 ## How to install dependencies
 
-Declare any dependencies in `src/requirements.txt` for `pip` installation and `src/environment.yml` for `conda` installation.
+Declare any dependencies in `src/requirements.txt` for `pip` installation and 
+`src/environment.yml` for `conda` installation.
 
 To install them, run:
 
 ```
 pip install -r src/requirements.txt
 ```
+Note: there are some issues with resolving version conflict of the requirement 
+packages, this step might take a while.
 
 ## How to run your Kedro pipeline
 
-You can run your Kedro project with:
+You can run a Kedro pipeline with:
 
 ```
-kedro run
+kedro run --pipeline PIPELINE_NAME
 ```
+
+There are currently 3 pipelines: 
+
+1. covalent - prepares a liquidity graph from the raw data of transactions 
+   downloaded from the covalent API
+2. ui - creates the datasets required for the dashboard, and spins up a Flask server 
+   to display the dashboard
+3. default - runs both the above pipeline
+
+## How to visualise your Kedro pipelines
+
+`kedro-viz` is a visualisation tool for kedro pipelines. You can read more about it 
+at the [Kedro viz repository](https://github.com/kedro-org/kedro-viz). To start it, run:
+
+```
+kedro viz
+```
+![kedro viz example](docs/img/kedro_viz.png)
+
 
 ## How to test your Kedro project
 
@@ -44,20 +72,6 @@ kedro test
 ```
 
 To configure the coverage threshold, go to the `.coveragerc` file.
-
-## Project dependencies
-
-To generate or update the dependency requirements for your project:
-
-```
-kedro build-reqs
-```
-
-This will `pip-compile` the contents of `src/requirements.txt` into a new file `src/requirements.lock`. You can see the output of the resolution by opening `src/requirements.lock`.
-
-After this, if you'd like to update your project requirements, please update `src/requirements.txt` and re-run `kedro build-reqs`.
-
-[Further information about project dependencies](https://kedro.readthedocs.io/en/stable/kedro_project_setup/dependencies.html#project-specific-dependencies)
 
 ## How to work with Kedro and notebooks
 
