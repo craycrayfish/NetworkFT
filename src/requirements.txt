@@ -6,13 +6,14 @@ jupyter~=1.0
 jupyterlab~=3.0
 kedro~=0.18.2
 kedro[pandas]
+kedro-viz~=4.7
+kedro-docker~=0.3.0
 nbstripout~=0.4
 pandas>=1.4
 pytest-cov~=3.0
 pytest-mock>=1.7.1, <2.0
 pytest~=6.2
 tqdm>=4.64
-web3~=5.3
 
 dash>=2.5.0
 dash-bootstrap-components>=1.2.0
