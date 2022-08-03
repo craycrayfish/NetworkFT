@@ -1,7 +1,12 @@
 # NetworkFT
 
-## Overview
+## Contents
+1. [Overview](#Overview)
+2. [Quickstart](#Quickstart)
+3. [Adapting NetworkFT](#Adapting NetworkFT)
+4. [Kedro](#Kedro)
 
+## Overview
 
 NetworkFT is a platform for visualising the flow of liquidity between NFT projects. 
 An example is shown below.
@@ -23,12 +28,18 @@ NetworkFT has been developed using Kedro, an opened-sourced Python framework
 for creating reproducible, maintainable and modular data science code. Take a look at 
 the [Kedro documentation](https://kedro.readthedocs.io) for more information.
 
-## How to install dependencies
+## Quickstart
 
-Declare any dependencies in `src/requirements.txt` for `pip` installation and 
-`src/environment.yml` for `conda` installation.
+## Adapting NetworkFT
 
-To install them, run:
+## Kedro
+
+### How to install dependencies
+
+Pre-requisites:
+  - Python 3 version <=3.9
+  - Kedro
+
 
 ```
 pip install -r src/requirements.txt
@@ -36,7 +47,7 @@ pip install -r src/requirements.txt
 Note: there are some issues with resolving version conflict of the requirement 
 packages, this step might take a while.
 
-## How to run your Kedro pipeline
+### How to run your Kedro pipeline
 
 You can run a Kedro pipeline with:
 
